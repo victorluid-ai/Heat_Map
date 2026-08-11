@@ -1,0 +1,38 @@
+cameras:
+  - id: "cam_0"
+    name: "Entrance"
+    source: 0
+    enabled: true
+
+detection:
+  model: "yolov8n.pt"
+  confidence_threshold: 0.4
+  device: "cpu"
+
+tracking:
+  max_age: 30
+  min_hits: 3
+  default_zone_id: "entrance"
+
+heatmap:
+  floor_plan_path: "config/floor_plan/store_layout.png"
+  resolution: [800, 600]
+  blur_kernel_size: 51
+  decay_factor: 0.995
+
+storage:
+  db_url: "sqlite:///data/heatmap.db"
+  batch_write_interval_seconds: 1
+  batch_write_max_events: 500
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+
+auth:
+  secret_key: "change-me-in-production"
+  token_expire_minutes: 480
+
+dashboard:
+  api_base_url: "http://localhost:8000"
+  refresh_interval_ms: 1000

@@ -1,0 +1,8 @@
+detection:
+  model: "yolov8s.pt"
+  confidence_threshold: 0.5
+  device: "cuda:0"
+
+# storage:
+#   db_url: "postgresql+psycopg2://USER:PASSWORD@HOST:5432/postgres"
+# Set DB_URL env var or uncomment above for Supabase / Postgres (see docs/supabase.md)

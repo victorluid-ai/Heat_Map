@@ -1,0 +1,11 @@
+cameras:
+  - id: "cam_0"
+    name: "Test Camera"
+    source: "data/recordings/sample.mp4"
+    enabled: true
+detection:
+  model: "yolov8n.pt"
+  confidence_threshold: 0.3
+  device: "cpu"
+storage:
+  db_url: "sqlite:///data/heatmap_dev.db"
