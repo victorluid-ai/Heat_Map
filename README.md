@@ -1,6 +1,6 @@
 # Heat Map — Retail foot-traffic analytics
 
-Real-time people tracking and heat maps for retail stores. Cameras feed a YOLOv8 + IoU tracking pipeline; results are stored in SQLite (or PostgreSQL/Supabase) and exposed via **FastAPI** with a **Streamlit** dashboard.
+Real-time people tracking and heat maps for retail stores. Cameras feed a YOLOv8 + IoU tracking pipeline; results are stored in SQLite (or PostgreSQL/Supabase) and exposed via **FastAPI** with a **TypeScript** web app (Vite + React).
 
 ## Requirements
 
@@ -28,17 +28,16 @@ python scripts/run_pipeline.py
 # or: .\run_pipeline.bat
 ```
 
-**Terminal 2 — Dashboard (port 8501):**
+**Terminal 2 — Web app (port 5173):**
 
 ```powershell
-.\.venv\Scripts\Activate.ps1
-python scripts/run_dashboard.py
-# or: .\run_dashboard.bat
+python scripts/run_web.py
+# requires Node.js / npm; installs web deps on first run
 ```
 
-Scripts auto-switch to `.venv` if you forget to activate it.
+The legacy Streamlit UI remains available via `python scripts/run_dashboard.py` (port 8501).
 
-Open http://localhost:8501, register a user, and explore Live View / Historical / Analytics.
+Open http://localhost:5173, register a user, rename your shops/cameras under **Mis tiendas**, and explore Live / Historical / Analytics.
 
 - API docs: http://localhost:8000/docs  
 - Health: http://localhost:8000/health  
@@ -117,7 +116,8 @@ See [`docs/architecture.md`](docs/architecture.md) for module layout and data fl
 ## Project layout
 
 ```
-src/           Application code (API, pipeline, dashboard, storage)
+src/           Application code (API, pipeline, legacy Streamlit dashboard, storage)
+web/           TypeScript + React web app (Vite)
 scripts/       CLI entry points
 config/        YAML settings
 tests/         Pytest suite

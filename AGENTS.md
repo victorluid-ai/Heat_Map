@@ -20,8 +20,10 @@ long-running services plus an embedded SQLite database. Standard commands live i
 ### Running the app (two services)
 - API + CV pipeline: `python scripts/run_pipeline.py --env dev` → serves on port `8000`
   (`/health`, `/docs`). The FastAPI process also runs the camera→detect→track→heatmap pipeline.
-- Dashboard: `python scripts/run_dashboard.py` → Streamlit on port `8501`. Start the API first,
-  or dashboard data/login calls fail (they degrade gracefully).
+- Web app: `python scripts/run_web.py` → Vite/React on port `5173` (proxies to the API).
+  Requires Node.js/npm. Prefer this over the legacy Streamlit UI.
+- Legacy dashboard: `python scripts/run_dashboard.py` → Streamlit on port `8501`.
+- Start the API first, or dashboard data/login calls fail (they degrade gracefully).
 - Start each service in its own persistent shell (e.g. tmux); they are foreground/long-running.
 
 ### Non-obvious gotchas
