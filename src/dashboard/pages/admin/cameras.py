@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import pandas as pd
 
+from ...components.theme import page_header, panel_title
+
 
 def _api(method: str, path: str, token: str, api_url: str, **kwargs):
     return requests.request(
@@ -14,7 +16,7 @@ def _api(method: str, path: str, token: str, api_url: str, **kwargs):
 
 
 def render(api_url: str, token: str) -> None:
-    st.title("Camera Management")
+    page_header("Camera Management", "Assign cameras to shops and monitor status", "videocam")
 
     try:
         cams_resp = _api("GET", "/admin/cameras", token, api_url)
@@ -33,6 +35,7 @@ def render(api_url: str, token: str) -> None:
         return
 
     if cameras:
+        panel_title("All Cameras", "table_rows")
         df = pd.DataFrame(
             [
                 {
@@ -52,7 +55,8 @@ def render(api_url: str, token: str) -> None:
     shop_options = {"Unassigned": None, **{s["name"]: s["id"] for s in shops}}
     shop_names = list(shop_options.keys())
 
-    st.subheader("Assign Cameras")
+    st.divider()
+    panel_title("Assign Cameras", "link")
     for c in cameras:
         current_label = c["shop_name"] if c["shop_name"] else "Unassigned"
         default_idx = shop_names.index(current_label) if current_label in shop_names else 0

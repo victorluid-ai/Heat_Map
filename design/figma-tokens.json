@@ -1,0 +1,56 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "meta": {
+    "name": "Heat Map Dashboard",
+    "version": "1.0.0",
+    "description": "Design tokens for Figma Code Connect / Variables sync"
+  },
+  "color": {
+    "background": {
+      "primary": { "value": "#0a0e17", "type": "color" },
+      "secondary": { "value": "#141b2d", "type": "color" },
+      "elevated": { "value": "#1a2332", "type": "color" }
+    },
+    "accent": {
+      "primary": { "value": "#00d4ff", "type": "color" },
+      "secondary": { "value": "#7c3aed", "type": "color" },
+      "gradient-start": { "value": "#00d4ff", "type": "color" },
+      "gradient-end": { "value": "#7c3aed", "type": "color" }
+    },
+    "text": {
+      "primary": { "value": "#e8edf5", "type": "color" },
+      "secondary": { "value": "#94a3b8", "type": "color" },
+      "muted": { "value": "#64748b", "type": "color" }
+    },
+    "border": {
+      "default": { "value": "#1e293b", "type": "color" },
+      "accent": { "value": "#00d4ff33", "type": "color" }
+    },
+    "status": {
+      "success": { "value": "#10b981", "type": "color" },
+      "warning": { "value": "#f59e0b", "type": "color" },
+      "error": { "value": "#ef4444", "type": "color" }
+    },
+    "chart": {
+      "line": { "value": "#00d4ff", "type": "color" },
+      "bar": { "value": "#7c3aed", "type": "color" },
+      "grid": { "value": "#1e293b", "type": "color" }
+    }
+  },
+  "spacing": {
+    "xs": { "value": "4px", "type": "dimension" },
+    "sm": { "value": "8px", "type": "dimension" },
+    "md": { "value": "16px", "type": "dimension" },
+    "lg": { "value": "24px", "type": "dimension" },
+    "xl": { "value": "32px", "type": "dimension" }
+  },
+  "radius": {
+    "sm": { "value": "6px", "type": "dimension" },
+    "md": { "value": "10px", "type": "dimension" },
+    "lg": { "value": "16px", "type": "dimension" }
+  },
+  "typography": {
+    "font-family": { "value": "Inter, system-ui, sans-serif", "type": "fontFamily" },
+    "heading-weight": { "value": "600", "type": "fontWeight" }
+  }
+}

@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import pandas as pd
 
+from ...components.theme import page_header, panel_title
+
 
 def _api(method: str, path: str, token: str, api_url: str, **kwargs):
     return requests.request(
@@ -14,7 +16,7 @@ def _api(method: str, path: str, token: str, api_url: str, **kwargs):
 
 
 def render(api_url: str, token: str) -> None:
-    st.title("User Management")
+    page_header("User Management", "Manage accounts, roles, and access status", "group")
 
     try:
         resp = _api("GET", "/admin/users", token, api_url)
@@ -28,6 +30,7 @@ def render(api_url: str, token: str) -> None:
         st.info("No users found.")
         return
 
+    panel_title("All Users", "table_rows")
     df = pd.DataFrame(
         [
             {
@@ -41,7 +44,8 @@ def render(api_url: str, token: str) -> None:
     )
     st.dataframe(df, use_container_width=True, hide_index=True)
 
-    st.subheader("Toggle User Status")
+    st.divider()
+    panel_title("Toggle User Status", "toggle_on")
     for u in users:
         col_email, col_btn = st.columns([3, 1])
         col_email.write(u["email"])
