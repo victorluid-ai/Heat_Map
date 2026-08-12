@@ -1,5 +1,8 @@
 import streamlit as st
 import requests
+
+from .components.nav import render_brand, render_customer_nav, render_admin_nav, render_user_badge
+from .components.theme import inject_global_styles
 from .pages import live_view, historical, analytics, login
 from .pages.admin import users as admin_users, shops as admin_shops, cameras as admin_cameras
 from ..utils.config import load_config
@@ -33,11 +36,13 @@ def _fetch_role(api_url: str, token: str) -> str:
 
 def main() -> None:
     st.set_page_config(
-        page_title="Retail Heat Map",
+        page_title="Heat Map — Retail Analytics",
         page_icon="🗺️",
         layout="wide",
         initial_sidebar_state="expanded",
     )
+    inject_global_styles()
+
     cfg = load_config()
     api_url = cfg["dashboard"]["api_base_url"]
     refresh_ms = cfg["dashboard"]["refresh_interval_ms"]
@@ -52,11 +57,10 @@ def main() -> None:
         st.session_state["role"] = _fetch_role(api_url, token)
 
     role = st.session_state["role"]
-
     camera_ids: list[str] = []
 
     with st.sidebar:
-        st.title("Retail Heat Map")
+        render_brand()
 
         if role == "customer":
             shops = _fetch_shops(api_url, token)
@@ -64,22 +68,24 @@ def main() -> None:
                 st.warning("No shops assigned to your account yet. Contact an admin.")
             else:
                 shop_map = {s["name"]: s for s in shops}
-                chosen = st.selectbox("Shop", list(shop_map.keys()))
+                st.markdown(
+                    '<p style="font-size:0.75rem;color:#64748b;text-transform:uppercase;'
+                    'letter-spacing:0.05em;margin-bottom:0.25rem;">'
+                    '<span class="hm-icon" style="font-size:1rem;">store</span> Shop</p>',
+                    unsafe_allow_html=True,
+                )
+                chosen = st.selectbox("Shop", list(shop_map.keys()), label_visibility="collapsed")
                 camera_ids = shop_map[chosen]["camera_ids"]
 
             st.divider()
-            page = st.radio("Navigation", ["Live View", "Historical Analysis", "Analytics"])
-
+            page = render_customer_nav()
         else:
             st.divider()
-            page = st.radio(
-                "Navigation",
-                ["Users", "Shops", "Cameras", "Live View", "Historical Analysis", "Analytics"],
-            )
+            page = render_admin_nav()
 
         st.divider()
-        st.caption(f"Logged in as: {st.session_state.get('email', '')}")
-        if st.button("Logout"):
+        render_user_badge(st.session_state.get("email", ""))
+        if st.button("Logout", use_container_width=True, type="primary"):
             st.session_state.clear()
             st.rerun()
 

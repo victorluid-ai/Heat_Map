@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import pandas as pd
 
+from ...components.theme import page_header, panel_title
+
 
 def _api(method: str, path: str, token: str, api_url: str, **kwargs):
     return requests.request(
@@ -14,7 +16,7 @@ def _api(method: str, path: str, token: str, api_url: str, **kwargs):
 
 
 def render(api_url: str, token: str) -> None:
-    st.title("Shop Management")
+    page_header("Shop Management", "Create, view, and manage retail locations", "storefront")
 
     try:
         shops_resp = _api("GET", "/admin/shops", token, api_url)
@@ -33,6 +35,7 @@ def render(api_url: str, token: str) -> None:
         return
 
     if shops:
+        panel_title("All Shops", "table_rows")
         df = pd.DataFrame(
             [
                 {
@@ -46,7 +49,8 @@ def render(api_url: str, token: str) -> None:
         )
         st.dataframe(df, use_container_width=True, hide_index=True)
 
-        st.subheader("Delete Shop")
+        st.divider()
+        panel_title("Delete Shop", "delete")
         for s in shops:
             col_name, col_btn = st.columns([3, 1])
             col_name.write(s["name"])
@@ -62,12 +66,12 @@ def render(api_url: str, token: str) -> None:
 
     owner_map = {u["email"]: u["id"] for u in users}
 
-    with st.expander("Create Shop"):
+    with st.expander("Create Shop", icon="➕"):
         with st.form("create_shop_form"):
             name = st.text_input("Shop Name")
             address = st.text_input("Address (optional)")
             owner_email = st.selectbox("Owner", list(owner_map.keys()))
-            submitted = st.form_submit_button("Create", use_container_width=True)
+            submitted = st.form_submit_button("Create", use_container_width=True, type="primary")
         if submitted:
             if not name:
                 st.error("Shop name is required.")
