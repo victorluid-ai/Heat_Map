@@ -105,6 +105,10 @@ htmlcov/
 .coverage
 *.pyc
 
+# TypeScript web app build
+web/dist/
+web/node_modules/
+
 # Local AI/tooling (not part of the product)
 .claude/
 .claude-flow/

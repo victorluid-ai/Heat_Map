@@ -20,7 +20,9 @@ def db_components():
         poolclass=StaticPool,
     )
     Base.metadata.create_all(engine)
-    factory = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+    factory = sessionmaker(
+        bind=engine, autoflush=False, autocommit=False, expire_on_commit=False
+    )
     yield engine, factory
     engine.dispose()
 
@@ -79,6 +81,7 @@ def api_client(session_factory, small_floor_plan):
                     "blur_kernel_size": 5, "decay_factor": 0.995},
         "api": {"host": "0.0.0.0", "port": 8000},
         "dashboard": {"api_base_url": "http://localhost:8000", "refresh_interval_ms": 1000},
+        "auth": {"secret_key": "test-secret", "token_expire_minutes": 60},
     }
 
     with patch("src.utils.config.load_config", return_value=minimal_cfg), \

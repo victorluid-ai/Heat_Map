@@ -22,7 +22,7 @@ def get_shops_by_owner(session: Session, owner_id: int) -> list[Shop]:
     return list(
         session.scalars(
             select(Shop).where(Shop.owner_id == owner_id).options(joinedload(Shop.cameras))
-        ).all()
+        ).unique().all()
     )
 
 
@@ -32,9 +32,27 @@ def upsert_camera(session: Session, camera_id: str, name: str, source_url: str) 
         cam = Camera(id=camera_id, name=name, source_url=str(source_url))
         session.add(cam)
     else:
-        cam.name = name
+        # Preserve user-edited names; only refresh the source URL on restart.
         cam.source_url = str(source_url)
     return cam
+
+
+def get_shop_by_id(session: Session, shop_id: int) -> Shop | None:
+    return session.scalars(
+        select(Shop).where(Shop.id == shop_id).options(joinedload(Shop.cameras))
+    ).unique().first()
+
+
+def update_shop_name(session: Session, shop: Shop, name: str) -> Shop:
+    shop.name = name.strip()
+    session.flush()
+    return shop
+
+
+def update_camera_name(session: Session, camera: Camera, name: str) -> Camera:
+    camera.name = name.strip()
+    session.flush()
+    return camera
 
 
 def bulk_insert_tracking_events(session: Session, updates: list[TrackUpdate]) -> int:

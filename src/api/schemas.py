@@ -22,11 +22,26 @@ class MeResponse(BaseModel):
     role: str
 
 
+class CameraInfo(BaseModel):
+    id: str
+    name: str
+    is_active: bool
+
+
 class ShopResponse(BaseModel):
     id: int
     name: str
     address: Optional[str]
     camera_ids: list[str]
+    cameras: list[CameraInfo] = []
+
+
+class ShopUpdateRequest(BaseModel):
+    name: str
+
+
+class CameraUpdateRequest(BaseModel):
+    name: str
 
 
 class HeatmapResponse(BaseModel):
@@ -45,12 +60,6 @@ class DwellSummary(BaseModel):
     visits: int
     avg_dwell_seconds: float
     max_dwell_seconds: float
-
-
-class CameraInfo(BaseModel):
-    id: str
-    name: str
-    is_active: bool
 
 
 class HealthResponse(BaseModel):
