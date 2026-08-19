@@ -18,3 +18,5 @@ bcrypt>=4.0.0
 requests>=2.31.0
 pandas>=2.0.0
 psycopg2-binary>=2.9.0
+supervision>=0.30.0
+trackers>=2.6.0

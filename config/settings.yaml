@@ -10,6 +10,7 @@ detection:
   device: "cpu"
 
 tracking:
+  method: "bytetrack"
   max_age: 30
   min_hits: 3
   default_zone_id: "entrance"
