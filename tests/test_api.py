@@ -65,3 +65,8 @@ def test_heatmap_historical_returns_png(api_client):
 def test_docs_endpoint(api_client):
     response = api_client.get("/docs")
     assert response.status_code == 200
+
+
+def test_stream_unknown_camera(api_client):
+    response = api_client.get("/stream/unknown_cam")
+    assert response.status_code == 404

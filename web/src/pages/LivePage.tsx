@@ -1,12 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { api, type Shop } from '../api/client'
 
-const REFRESH_MS = 2000
-
 export function LivePage() {
   const [shops, setShops] = useState<Shop[]>([])
   const [cameraId, setCameraId] = useState('')
-  const [bust, setBust] = useState(Date.now())
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -30,12 +27,6 @@ export function LivePage() {
     }
   }, [])
 
-  useEffect(() => {
-    if (!cameraId) return
-    const id = window.setInterval(() => setBust(Date.now()), REFRESH_MS)
-    return () => window.clearInterval(id)
-  }, [cameraId])
-
   const options = useMemo(
     () =>
       shops.flatMap((shop) =>
@@ -51,7 +42,7 @@ export function LivePage() {
     <div>
       <header className="page-header">
         <h1>Vista en vivo</h1>
-        <p>Mapa de calor en tiempo real de la cámara seleccionada.</p>
+        <p>Vídeo continuo de la cámara, con mapa de calor y tracks identificados.</p>
       </header>
       {error ? <div className="error-banner">{error}</div> : null}
       <section className="panel">
@@ -82,12 +73,15 @@ export function LivePage() {
         </div>
         {cameraId ? (
           <img
-            className="heatmap-frame"
-            src={api.heatmapLiveUrl(cameraId, bust)}
-            alt={`Mapa de calor en vivo de ${cameraId}`}
+            key={cameraId}
+            className="live-stream"
+            src={api.streamUrl(cameraId)}
+            alt={`Vídeo en directo de ${cameraId}`}
           />
         ) : (
-          <p className="empty-state">Selecciona una cámara para ver el mapa en vivo.</p>
+          <p className="empty-state">
+            No hay cámaras asignadas a tus tiendas. Un administrador debe asociar una cámara.
+          </p>
         )}
       </section>
     </div>

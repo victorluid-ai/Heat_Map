@@ -10,7 +10,12 @@ export default defineConfig({
       '/shops': 'http://127.0.0.1:8000',
       '/heatmap': 'http://127.0.0.1:8000',
       '/analytics': 'http://127.0.0.1:8000',
-      '/stream': 'http://127.0.0.1:8000',
+      '/stream': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        timeout: 0,
+        proxyTimeout: 0,
+      },
       '/admin': 'http://127.0.0.1:8000',
       '/health': 'http://127.0.0.1:8000',
     },

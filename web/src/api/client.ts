@@ -141,6 +141,10 @@ export const api = {
     return `/heatmap/live?camera_id=${encodeURIComponent(cameraId)}&t=${bust}`
   },
 
+  streamUrl(cameraId: string) {
+    return `/stream/${encodeURIComponent(cameraId)}`
+  },
+
   heatmapHistoricalUrl(start: number, end: number, cameraId?: string) {
     const params = new URLSearchParams({
       start: String(start),

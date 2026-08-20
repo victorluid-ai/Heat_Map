@@ -35,6 +35,10 @@ class _Track:
     track_id: int
     cx: float
     cy: float
+    x1: float = 0.0
+    y1: float = 0.0
+    x2: float = 0.0
+    y2: float = 0.0
     hits: int = 1
     age: int = 0
     confidence: float = 1.0
@@ -76,12 +80,22 @@ class PersonTracker:
             if matched is not None:
                 matched.cx = cx
                 matched.cy = cy
+                matched.x1 = det.x1
+                matched.y1 = det.y1
+                matched.x2 = det.x2
+                matched.y2 = det.y2
                 matched.hits += 1
                 matched.age = 0
                 matched.confidence = det.confidence
             else:
                 self._tracks[self._next_id] = _Track(
-                    track_id=self._next_id, cx=cx, cy=cy,
+                    track_id=self._next_id,
+                    cx=cx,
+                    cy=cy,
+                    x1=det.x1,
+                    y1=det.y1,
+                    x2=det.x2,
+                    y2=det.y2,
                     confidence=det.confidence,
                 )
                 self._next_id += 1
@@ -226,6 +240,10 @@ class ByteTrackPersonTracker(PersonTracker):
                     track_id=track_id,
                     cx=cx,
                     cy=cy,
+                    x1=x1,
+                    y1=y1,
+                    x2=x2,
+                    y2=y2,
                     hits=hits,
                     age=int(tracklet.time_since_update),
                     confidence=confidence,
@@ -234,6 +252,10 @@ class ByteTrackPersonTracker(PersonTracker):
                 track = self._tracks[track_id]
                 track.cx = cx
                 track.cy = cy
+                track.x1 = x1
+                track.y1 = y1
+                track.x2 = x2
+                track.y2 = y2
                 track.age = int(tracklet.time_since_update)
 
                 if updated_this_frame:

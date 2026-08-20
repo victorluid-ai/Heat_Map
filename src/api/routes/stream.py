@@ -28,4 +28,9 @@ async def stream_camera(camera_id: str, coordinator=Depends(get_coordinator)):
     return StreamingResponse(
         _mjpeg_generator(coordinator, camera_id),
         media_type="multipart/x-mixed-replace; boundary=frame",
+        headers={
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "X-Accel-Buffering": "no",
+        },
     )

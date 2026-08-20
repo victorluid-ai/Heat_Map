@@ -16,6 +16,10 @@ def test_tracker_creates_track_from_single_detection():
     assert len(tracks) == 1
     assert tracks[0].cx == pytest.approx(5.0)
     assert tracks[0].cy == pytest.approx(10.0)
+    assert tracks[0].x1 == pytest.approx(0.0)
+    assert tracks[0].y1 == pytest.approx(0.0)
+    assert tracks[0].x2 == pytest.approx(10.0)
+    assert tracks[0].y2 == pytest.approx(20.0)
 
 
 def test_tracker_returns_empty_with_no_detections():
@@ -94,6 +98,8 @@ def test_byte_tracker_creates_track_from_single_detection():
     assert len(tracks) == 1
     assert tracks[0].cx == pytest.approx(5.0)
     assert tracks[0].cy == pytest.approx(10.0)
+    assert tracks[0].x2 > tracks[0].x1
+    assert tracks[0].y2 > tracks[0].y1
 
 
 def test_byte_tracker_returns_empty_with_no_detections():

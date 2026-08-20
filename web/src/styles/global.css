@@ -434,6 +434,17 @@ button {
   background: #000;
 }
 
+.live-stream {
+  display: block;
+  width: 100%;
+  max-height: min(70vh, 720px);
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-accent);
+  background: #000;
+  box-shadow: var(--shadow-panel);
+}
+
 .toolbar {
   display: flex;
   flex-wrap: wrap;

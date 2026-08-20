@@ -9,6 +9,7 @@ from ..tracking.dwell_calculator import DwellCalculator
 from ..tracking.track_record import DwellUpdate
 from ..heatmap.accumulator import HeatmapAccumulator
 from ..ingestion.camera_reader import CameraReader
+from .annotator import annotate_live_frame
 from .events import EventBus, PipelineEvent
 
 logger = logging.getLogger(__name__)
@@ -79,7 +80,7 @@ class PipelineRunner:
             self._active_track_ids = current_ids
 
             for track in active_tracks:
-                self._accumulator.add_point(track.cx, track.cy)
+                self._accumulator.add_point(track.cx, track.cy, frame_shape=frame.shape)
                 self._dwell_calc.record_entry(self._camera_id, track.track_id, ts)
 
             # Decay heatmap periodically (every frame is fine, it's per-frame factor)
@@ -96,7 +97,8 @@ class PipelineRunner:
                 ))
 
             # Store latest annotated frame for MJPEG streaming
-            annotated = self._annotate_frame(frame, active_tracks)
+            overlaid = self._accumulator.overlay_on_frame(frame)
+            annotated = annotate_live_frame(overlaid, active_tracks, self._camera_id)
             with self._frame_lock:
                 self._annotated_frame = annotated
 
@@ -122,13 +124,3 @@ class PipelineRunner:
         for track_id in list(self._active_track_ids):
             self._publish_dwell_exit(track_id, timestamp)
         self._active_track_ids.clear()
-
-    def _annotate_frame(self, frame: np.ndarray, tracks) -> np.ndarray:
-        import cv2
-        out = frame.copy()
-        for track in tracks:
-            cx, cy = int(track.cx), int(track.cy)
-            cv2.circle(out, (cx, cy), 6, (0, 255, 0), -1)
-            cv2.putText(out, str(track.track_id), (cx + 8, cy - 8),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-        return out

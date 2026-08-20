@@ -57,3 +57,19 @@ def test_kde_renderer_empty_points_returns_base(small_floor_plan):
     renderer = KDERenderer(small_floor_plan, bandwidth=5)
     image = renderer.render([])
     assert image.shape == (small_floor_plan.height, small_floor_plan.width, 3)
+    assert image.dtype == np.uint8
+
+
+def test_overlay_on_frame_matches_shape_without_heat(accumulator, sample_frame):
+    out = accumulator.overlay_on_frame(sample_frame)
+    assert out.shape == sample_frame.shape
+    assert np.array_equal(out, sample_frame)
+
+
+def test_overlay_on_frame_blends_camera_space_heat(accumulator, sample_frame):
+    accumulator.add_point(120.0, 90.0, weight=800.0, frame_shape=sample_frame.shape)
+    out = accumulator.overlay_on_frame(sample_frame)
+    assert out.shape == sample_frame.shape
+    assert out.dtype == np.uint8
+    assert not np.array_equal(out, sample_frame)
+    assert int(out.max()) > 0
