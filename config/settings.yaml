@@ -6,12 +6,27 @@ cameras:
 
 detection:
   model: "yolov8n.pt"
-  confidence_threshold: 0.4
+  # Slightly below high_conf_det_threshold so ByteTrack can recover occluded people
+  # with mid-confidence boxes (two-stage association).
+  confidence_threshold: 0.35
   device: "cpu"
 
 tracking:
-  max_age: 30
+  method: "bytetrack"
+  # ~1.8s grace at 25 FPS — keeps the same ID through brief shelf/person occlusions
+  # so dwell visits are not fragmented.
+  max_age: 45
+  # Wait for a few confirmed hits before heatmap/dwell/analytics see the track.
   min_hits: 3
+  frame_rate: 25.0
+  # Only spawn tracks from solid detections (aligned with detector floor).
+  track_activation_threshold: 0.4
+  # ByteTrack internal maturity before a track survives a missed frame.
+  minimum_consecutive_frames: 2
+  # Slightly stricter than stock 0.1 to reduce ID swaps when people overlap.
+  minimum_iou_threshold: 0.15
+  # High/low split: >=0.5 first association; 0.35–0.5 recovers lost tracks.
+  high_conf_det_threshold: 0.5
   default_zone_id: "entrance"
 
 heatmap:

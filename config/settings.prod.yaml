@@ -1,7 +1,15 @@
 detection:
   model: "yolov8s.pt"
-  confidence_threshold: 0.5
+  # Keep a low band below high_conf so ByteTrack's second association stage can run.
+  confidence_threshold: 0.4
   device: "cuda:0"
+
+tracking:
+  frame_rate: 25.0
+  track_activation_threshold: 0.45
+  high_conf_det_threshold: 0.6
+  minimum_iou_threshold: 0.2
+  max_age: 50
 
 # storage:
 #   db_url: "postgresql+psycopg2://USER:PASSWORD@HOST:5432/postgres"

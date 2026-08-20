@@ -7,5 +7,10 @@ detection:
   model: "yolov8n.pt"
   confidence_threshold: 0.3
   device: "cpu"
+tracking:
+  # sample.mp4 placeholder is typically ~20 FPS; scale lost-track buffer accordingly.
+  frame_rate: 20.0
+  track_activation_threshold: 0.3
+  high_conf_det_threshold: 0.45
 storage:
   db_url: "sqlite:///data/heatmap_dev.db"
